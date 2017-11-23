@@ -1,6 +1,6 @@
 from io import open
 
-from setuptools import find_packages, setup
+from setuptools import setup, find_packages
 
 with open('kick/__init__.py', 'r') as f:
     for line in f:
@@ -16,7 +16,8 @@ with open('README.md', 'r', encoding='utf-8') as f:
 REQUIRES = [
     'addict',
     'toml',
-    'daiquiri'
+    'daiquiri',
+    'first'
 ]
 
 setup(
