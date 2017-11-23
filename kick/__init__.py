@@ -1,4 +1,4 @@
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 
 import inspect
 import pathlib
@@ -12,7 +12,7 @@ config = None
 logger = None
 
 
-def get_caller_path(self):
+def get_caller_path():
     stack = inspect.stack()
     try:
         frame = first(stack, key=lambda frame: 'kick.start(' in (frame.code_context[0] or ['']))
