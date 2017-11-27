@@ -44,6 +44,6 @@ def Config(name, path=None, variant='config'):
 def update_config(name, path=None, variant='config'):
     config_path = CONFIGDIR / name / f'{variant}.toml'
     config = Config(name, path, variant)
-    local_config = toml.loads((path or get_local_config_path(variant)).read_text())
+    local_config = addict.Dict(toml.loads((path or get_local_config_path(variant)).read_text()))
     local_config.update(config)
     config_path.write_text(toml.dumps(local_config))
