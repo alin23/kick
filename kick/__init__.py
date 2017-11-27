@@ -1,27 +1,13 @@
-__version__ = '0.1.3'
+__version__ = '0.2.0'
 
-import inspect
-import pathlib
-
-from first import first
-
-from .config import Config
+from .config import Config, update_config
 from .logging import Logger
 
 config = None
 logger = None
 
 
-def get_caller_path():
-    stack = inspect.stack()
-    try:
-        frame = first(stack, key=lambda frame: 'kick.start(' in (frame.code_context[0] or ['']))
-        return pathlib.Path(frame.filename).parent / 'config.toml'
-    finally:
-        del stack
-
-
-def start(name, config_path=None):
+def start(name, config_path=None, config_variant='config'):
     global config, logger
-    config = Config(name, config_path or get_caller_path())
+    config = Config(name, config_path, variant=config_variant)
     logger = Logger(name)
