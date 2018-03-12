@@ -35,7 +35,7 @@ def Config(name, path=None, variant='config'):
     if not config_path.exists():
         config_path.parent.mkdir(parents=True, exist_ok=True)
         local_config_path = path or get_local_config_path(variant)
-        shutil.copy(local_config_path, config_path)
+        shutil.copy(str(local_config_path), str(config_path))
         print('Created config: {}'.format(config_path))
 
     config = addict.Dict(toml.loads(config_path.read_text()))
