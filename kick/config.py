@@ -36,6 +36,7 @@ def Config(name, path=None, variant='config'):
         config_path.parent.mkdir(parents=True, exist_ok=True)
         local_config_path = path or get_local_config_path(variant)
         shutil.copy(local_config_path, config_path)
+        print('Created config: {}'.format(config_path))
 
     config = addict.Dict(toml.loads(config_path.read_text()))
     return config
@@ -47,3 +48,4 @@ def update_config(name, path=None, variant='config'):
     local_config = addict.Dict(toml.loads((path or get_local_config_path(variant)).read_text()))
     local_config.update(config)
     config_path.write_text(toml.dumps(local_config))
+    print('Updated config: {}'.format(config_path))
