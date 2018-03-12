@@ -13,7 +13,7 @@ def Logger(name=None, level=logging.INFO):
 
     daiquiri.setup(outputs=(
         daiquiri.output.STDERR,
-        daiquiri.output.File(directory=LOGDIR)
+        daiquiri.output.File(directory=str(LOGDIR))
     ), level=level)
 
     logger = daiquiri.getLogger(name)
