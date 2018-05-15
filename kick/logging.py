@@ -20,7 +20,9 @@ def get_daiquiri_logger(name, level):
 
 
 def Logger(name=None, level=logging.INFO, without_daiquiri=None):
-    daiquiri_env_key = "{}_NO_DAIQUIRI".format(name.upper())
+    daiquiri_env_key = "{}_NO_DAIQUIRI".format(
+        name.upper().replace("-", "_").replace(" ", "_")
+    )
     without_daiquiri = without_daiquiri or os.getenv(daiquiri_env_key) in {"true", "1"}
     if without_daiquiri:
         logger = logging.getLogger(name)
