@@ -11,14 +11,14 @@ APP_ENV_NAME = None
 TRUE_VALUES = {"true", "1"}
 
 
-def start(name, config_path=None, config_variant="config", without_daiquiri=None):
+def start(name, config_path=None, config_variant=None, without_daiquiri=None):
     global config, logger, APP_ENV_NAME
 
     APP_ENV_NAME = name.upper().replace("-", "_").replace(" ", "_")
     config_path = config_path or os.getenv("{}_CONFIG".format(APP_ENV_NAME), None)
     config_variant = config_variant or os.getenv(
-        "{}_ENV".format(APP_ENV_NAME), "config"
-    )
+        "{}_ENV".format(APP_ENV_NAME)
+    ) or "config"
     if without_daiquiri is None:
         without_daiquiri = os.getenv(
             "{}_NO_DAIQUIRI".format(APP_ENV_NAME)
