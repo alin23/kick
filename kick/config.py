@@ -1,4 +1,6 @@
 import shutil
+import os
+import re
 import inspect
 import pathlib
 
@@ -7,7 +9,7 @@ import addict
 from first import first
 
 CONFIGDIR = pathlib.Path.home() / '.config'
-
+ENV_VAR_PATTERN = re.compile('@([A-Z_]+)')
 
 def get_caller_path():
     stack = inspect.stack()
@@ -29,6 +31,21 @@ def get_local_config_path(variant):
         path = local_dir / 'config' / 'config.toml'
     return path
 
+def env_var_or_key(match):
+    return os.getenv(match.group(1), match.group(0))
+
+def replace_env_variables(config):
+    config = addict.Dict(config)
+    for key, value in config.items():
+        if isinstance(value, str):
+            config[key] = ENV_VAR_PATTERN.sub(env_var_or_key, value)
+        elif isinstance(value, list):
+            for i, v in enumerate(value):
+                if isinstance(value, str):
+                    config[key] = ENV_VAR_PATTERN.sub(env_var_or_key, value)
+        elif isinstance(value, dict):
+            config[key] = replace_env_variables(value)
+    return config
 
 def Config(name, path=None, variant='config'):
     config_path = CONFIGDIR / name / '{}.toml'.format(variant)
@@ -39,6 +56,7 @@ def Config(name, path=None, variant='config'):
         print('Created config: {}'.format(config_path))
 
     config = addict.Dict(toml.loads(config_path.read_text()))
+    config = replace_env_variables(config)
     return config
 
 
