@@ -41,13 +41,19 @@ def env_var_or_key(match):
 
 def replace_env_variables(config):
     config = addict.Dict(config)
-    for key, value in config.items():
-        if isinstance(value, str):
-            config[key] = ENV_VAR_PATTERN.sub(env_var_or_key, value)
-        elif isinstance(value, list):
-            config[key] = [replace_env_variables(v) for v in value]
-        elif isinstance(value, dict):
-            config[key] = replace_env_variables(value)
+
+    if isinstance(config, str):
+        return ENV_VAR_PATTERN.sub(env_var_or_key, config)
+    if isinstance(config, list):
+        return [replace_env_variables(v) for v in config]
+    if isinstance(config, dict):
+        for key, value in config.items():
+            if isinstance(value, str):
+                config[key] = ENV_VAR_PATTERN.sub(env_var_or_key, value)
+            elif isinstance(value, list):
+                config[key] = [replace_env_variables(v) for v in value]
+            elif isinstance(value, dict):
+                config[key] = replace_env_variables(value)
     return config
 
 
