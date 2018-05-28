@@ -45,9 +45,7 @@ def replace_env_variables(config):
         if isinstance(value, str):
             config[key] = ENV_VAR_PATTERN.sub(env_var_or_key, value)
         elif isinstance(value, list):
-            for i, v in enumerate(value):
-                if isinstance(v, str):
-                    config[key][i] = ENV_VAR_PATTERN.sub(env_var_or_key, v)
+            config[key] = [replace_env_variables(v) for v in value]
         elif isinstance(value, dict):
             config[key] = replace_env_variables(value)
     return config
