@@ -17,6 +17,7 @@ REQUIRES = [
     'addict',
     'toml',
     'daiquiri',
+    'pint',
     'first'
 ]
 
