@@ -31,12 +31,8 @@ def get_caller_path():
     return path
 
 
-def get_local_config_path(variant, local_dir=None):
-    local_dir = local_dir or get_caller_path() or pathlib.Path(".")
-    path = local_dir / "config" / "{}.toml".format(variant)
-    if not path.exists():
-        path = local_dir / "config" / "config.toml"
-    return path
+def get_local_config_path():
+    return (get_caller_path() or pathlib.Path(".")) / "config"
 
 
 def env_var_or_key(match):
@@ -167,7 +163,7 @@ def get_config_path(app_name, project_config_dir=None, test=False, debug=True):
     if config_path.exists():
         return config_path
 
-    project_config_dir = project_config_dir or get_local_config_path(config_name)
+    project_config_dir = project_config_dir or get_local_config_path()
     config_path = project_config_dir / f"{config_name}.toml"
     if not config_path.exists():
         raise FileNotFoundError(f"Can't find config '{config_name}.toml'")
